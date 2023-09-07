@@ -1,0 +1,25 @@
+@import '../../../colors/_theme.scss';
+
+.tool-wm-container {
+	background: $surface0;
+	border-radius: 20px;
+}
+
+.tool-wm-inner {
+	margin: .5em;
+	background: $base;
+	border-radius: 15px;
+}
+
+.tool-wm-close {
+	font-family: fira code;
+	font-size: 2em;
+	color: $red;
+	margin-right: .25em;
+	margin-top: .1em;
+	font-weight: bold;
+}
+
+.tool-wm-close:hover {
+	color: $peach;
+}

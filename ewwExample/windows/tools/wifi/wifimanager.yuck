@@ -1,0 +1,20 @@
+(defwindow wifi-popup :monitor 0
+               :geometry (geometry :x "0%"
+                                   :y "0%"
+                                   :width "500px"
+                                   :height "500px"
+                                   :anchor "center")
+               :stacking "overlay"
+               :exclusive false
+               :class "wifi-window"
+ (wifimanager))
+
+(defwidget wifimanager []
+  (box :class "tool-wm-container"
+       (box :class "tool-wm-inner"
+            (button :class "tool-wm-close"
+                    :halign "end"
+                    :valign "start"
+                    :onclick "${EWW_CMD} close wifi-popup"
+                    "X"))))
+

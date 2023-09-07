@@ -1,0 +1,70 @@
+#!/bin/sh
+output=$(hyprctl info --batch activewindow)
+
+open(){
+	
+	if [ "$output" = "Invalid" ]; then
+		echo "false"
+	else
+		echo "true"
+	fi
+}
+
+workspaceicon(){
+	workspace=$(hyprctl monitors | grep active | awk '{print $3}')
+	
+	case "$workspace" in
+		1) echo 󰼏
+		;;
+		2) echo 󰼐
+		;;
+		3) echo 󰼑
+		;;
+		4) echo 󰼒
+		;;
+		5) echo 󰼓 
+		;;
+		6) echo 󰼔
+		;;
+		7) echo 󰼕
+		;;
+		8) echo 󰼕
+		;;
+		9) echo 󰼗
+		;;
+		10) echo 󰿪
+		;;
+	esac
+
+	exit
+}
+
+workspacelist() {
+	# Run the hyprctl command and store the output
+	output=$(hyprctl workspaces)
+
+	# Extract workspace IDs using grep and awk
+	workspace_ids=$(echo "$output" | grep -o 'workspace ID [0-9]*' | awk '{print $NF}')
+
+	# Sort the workspace IDs
+	sorted_workspace_ids=$(echo "$workspace_ids" | sort -n)
+
+	# Generate JSON array from sorted IDs
+	json_array="["
+	first=true
+	for id in $sorted_workspace_ids; do
+		if [ "$first" = true ]; then
+			json_array+="$id"
+			first=false
+		else
+			json_array+=", $id"
+		fi
+	done
+	json_array+="]"
+
+	echo "$json_array"
+}
+
+[ "$1" = "windowopen" ] && open && exit
+[ "$1" = "workspace-icon" ] && workspaceicon && exit
+[ "$1" = "workspacelist" ] && workspacelist && exit

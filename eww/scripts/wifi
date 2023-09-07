@@ -1,0 +1,34 @@
+#!/bin/sh
+
+strength=$(awk 'NR==3 {print substr($3, 1, length($3)-1)}''' /proc/net/wireless)
+
+icon(){
+	[ $(cat /sys/class/net/w*/operstate) = down ] && echo 󰤮 && exit
+	
+	if [ "$strength" -gt "80" ]; then
+		symb="󰤨"
+	elif [ "$strength" -gt "60" ]; then
+		symb="󰤥"
+	elif [ "$strength" -gt "40" ]; then
+		symb="󰤢"
+	elif [ "$strength" -gt "20" ]; then
+		symb="󰤟"
+	elif [ "$strength" -gt "10" ]; then
+		symb="󰤯"
+	else
+		symb="󰤫"
+		notify-send -u warning "Network" "possible disconnect, strength <= 10"
+	fi
+
+	echo "$symb"
+}
+
+name(){
+	[ $(cat /sys/class/net/w*/operstate) = down ] && echo "Not connected to anything" && exit
+
+	nmcli | grep "^wlp" | sed 's/\ connected\ to\ /Connected to /g' | cut -d ":" -f2
+}
+
+[ "$1" = "strength" ] && echo $strength && exit
+[ "$1" = "icon" ] && icon && exit
+[ "$1" = "name" ] && name && exit

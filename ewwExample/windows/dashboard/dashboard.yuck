@@ -1,0 +1,8 @@
+(defwindow stats :monitor 0
+               :geometry (geometry :x "1280px"
+                                   :y "0px" ;720
+                                   :width "200px"
+                                   :height "200px"
+                                   :anchor "left top")
+               :stacking "bg"
+ (box :css "box {background: red;}"))

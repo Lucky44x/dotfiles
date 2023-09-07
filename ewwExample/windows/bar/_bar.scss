@@ -1,0 +1,139 @@
+@import '../../colors/_theme.scss';
+
+.side-bar {
+	background: $red;
+}
+
+.sidebar-container {
+	background: $transparent;
+	//border: 5px solid $crust;
+	background: $base;
+}
+
+.sidebar-bottom-container {
+	background: $surface0;
+	border-radius: 15px;
+	margin: 0 1em 1em 1em
+}
+
+.sidebar-top-container {
+	background: $surface0;
+}
+
+.sidebar-wifi {
+	font-size: 3em;
+	//border: 1px solid blue;
+	margin-left: .35em;
+	color: $mauve;
+}
+
+.sidebar-bluetooth {
+	font-size: 3em;
+	//border: 1px solid blue;
+	margin-left: .45em;
+}
+
+.sidebar-battery {
+	font-size: 3em;
+	//border: 1px solid blue;
+	margin-left: .5em;
+}
+
+.sidebar-volume-label {
+	font-size: 3em;
+	color: $green
+}
+
+.sidebar-volume-slider trough highlight{
+	background: $green;
+	border-radius: 15px;
+}
+
+.sidebar-brightness-label {
+	font-size: 3em;
+	color: $yellow;
+	margin-right: .25em;
+	margin-bottom: .2em;
+}
+
+.sidebar-brightness-slider trough highlight{
+	background: $yellow;
+	border-radius: 15px;
+}
+
+.sidebar-powermenu {
+	margin-bottom: 1em;
+}
+
+.sidebar-pm-b-power {
+	font-size: 2.5em;
+	color: $red;
+	margin-right: .16em;
+}
+
+.sidebar-pm-b-reboot {
+	font-size: 2.5em;
+	margin-right: .16em;
+	color: $peach;
+}
+
+.sidebar-pm-b-lock {
+	font-size: 2.5em;
+	margin-right: .06em;
+	color: $overlay2
+}
+
+.sidebar-clock {
+	font-family: Fira Code;
+	font-weight: bold;
+	font-size: 2.5em;
+
+	background: $surface0;
+	margin-top: .25em;
+}
+
+.sidebar-clock-label {
+	color: $text;
+}
+
+.sidebar-musicmenu {
+	
+}
+
+.sidebar-mm-playback {
+	font-size: 3em;
+	color: $text;
+}
+
+.sidebar-mm-next {
+	font-size: 3em;
+	color: $text;
+}
+
+.sidebar-mm-previous {
+	font-size: 3em;
+	color: $text;
+}
+
+.sidebar-mm-shuffle {
+	font-size: 2em;
+	color: $text;
+}
+
+.sidebar-mm-loop {
+	font-size: 2em;
+	color: $text;
+	margin-right: .5em;
+}
+
+.sidebar-mm-icon {
+	background-size: cover;
+}
+
+.sidebar-workspace-icon {
+	margin-top: .5em;
+	margin-bottom: .5em;
+	font-size: 2em;
+	color: $text;
+	margin-right: .3em;
+}

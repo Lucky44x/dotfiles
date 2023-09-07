@@ -1,0 +1,185 @@
+(defvar expandbar true)
+(defvar expandclock false)
+(defvar expandvolume false)
+(defvar expandbrightness false)
+(defvar expandmusic false)
+(defvar expandworkspace false)
+
+(defwidget topbar [] 
+  (box :halign "start"
+       :valign "start"
+       (revealer :transition "slidedown"
+                 :reveal expandbar
+                 :duration "550ms"
+                 (box :class "topbar-container"
+                      :halign "fill"
+                      :valign "fill"
+                      :width 1920
+                      :height 60
+                      (start)
+                      (middle)
+                      (end)))))
+
+(defwidget start []
+  (box :halign "start"
+       :valign "center"
+       :orientation "h"
+       :space-evenly false
+       :spacing 10
+       (clock)
+       (workspaces)))
+
+(defwidget middle []
+  (box :halign "center"
+       :valign "center"
+       :orientation "h"
+       :space-evenly false
+       :spacing 10
+       (music)))
+
+(defwidget end []
+  (box :halign "end"
+       :valign "center"
+       :orientation "h"
+       :space-evenly false
+       :spacing 10
+       (brightness)
+       (volume)
+       (wifi)
+       (bluetooth)
+       (battery)
+       (box :class "sys-tray-container"
+            (systray :pack_direction "ltr"
+                    :class "sys-tray"))))
+
+(defwidget wifi []
+  (eventbox :class "wifi-container"
+            :tooltip "${wifi-name}"
+            :width 50
+            :height 50
+            :onclick "notify-send 'NMTUI'"
+            :onrightclick "notify-send 'Wifi - Toggle Power'"
+       (label :text "${wifi-icon}")))
+
+(defwidget bluetooth []
+  (eventbox :class "bluetooth-container-${bluetooth-active}"
+            :tooltip "${bluetooth-name}"
+            :width 50
+            :height 50
+            :onclick "hyprctl dispatch exec blueman-manager"
+            :onrightclick "${scripts}bluetooth toggle"
+       (label :text "${bluetooth-icon}")))
+
+(defwidget battery []
+  (box :class "battery-container-${battery-state}"
+       :tooltip "${battery-percent}%"
+       (label :text "${battery-icon}")))
+
+(defwidget clock []
+  (box :class "time-container"
+       :halign "end"
+       :valign "center"
+       :tooltip "${current-time-tooltip}"
+       (label :text "${current-time-hour}:${current-time-minute}"))) 
+
+(defwidget brightness []
+  (box :class "brightness-container"
+       :halign "end"
+       :valign "center"
+       :tooltip "${current-volume}%"
+       (bar-slider :class "brightness"
+                   :reveal expandbrightness
+                   :reveal-name "expandbrightness"
+                   :label "󰃠"
+                   :value current-brightness
+                   :onchange "brightnessctl set {}%"
+                   :tooltip "${current-brightness}%")))
+
+
+
+(defwidget volume []
+  (box :class "volume-container"
+       :halign "end"
+       :valign "center"
+       :tooltip "${current-volume}%"
+       (bar-slider :class "volume"
+                   :reveal expandvolume
+                   :reveal-name "expandvolume"
+                   :label volume-icon
+                   :value current-volume
+                   :onchange "amixer sset Master {}%"
+                   :tooltip "${current-volume}%")))
+
+(defwidget music []
+  (eventbox :halign "center"
+            :valign "center"
+            ;:tooltip "${song-artist}:${song-name}"
+            :onhover "${EWW_CMD} update expandmusic=true"
+            :onhoverlost "${EWW_CMD} update expandmusic=false"
+            :onclick "playerctl play-pause"
+            :visible player-active
+            :actibe player-active
+    (box :space-evenly false
+         :spacing 5
+         (revealer :reveal expandmusic
+                   :transition "slideleft"
+                   :duration "550ms"
+                   (box :orientation "h"
+                        :space-evenly false
+                        :spacing 5
+                        (button :class "mm-button"
+                                :onclick "playerctl previous" "󰒮")
+                        (button :class "mm-button"
+                                :tooltip "Loop: ${song-loopmode}"
+                                :onclick "${scripts}music changeloop" "${song-loopicon}")))
+         (box :class "music-container"
+              :width 50
+              :height 50
+              :tooltip "${song-artist}: ${song-name}"
+              :style "background-image: url('${song-cover}');"
+              (label :text "${player-symbol}"
+                     :visible expandmusic))
+         (revealer :reveal expandmusic
+                      :transition "slideright"
+                      :duration "550ms"
+                      (box :orientation "h"
+                           :space-evenly false
+                           :spacing 5
+                           (button :class "mm-button"
+                                   :tooltip "Shuffle: ${song-shufflemode}"
+                                   :onclick "playerctl shuffle Toggle" "${song-shuffleicon}")
+                           (button :class "mm-button"
+                                   :onclick "playerctl next" "󰒭"))))))
+
+(defwidget workspaces []
+  (eventbox :class "workspace-container"
+            :width 50
+            ;:height 50
+            :halign "start"
+            :valign "center"
+            :onhover "${EWW_CMD} update expandworkspace=true"
+            :onhoverlost "${EWW_CMD} update expandworkspace=false"
+            (box :space-evenly false
+                 :orientation "h"
+                 (label :text current-workspace
+                        :halign "center")
+                 (revealer :transition "slideright"
+                           :duration "550ms"
+                           :reveal expandworkspace
+                           (box :class "workspace-list-container"
+                                :orientation "h"
+                                :space-evenly false
+                                :spacing 15
+                                (for entry in workspace-list
+                                     (workb :id entry)))))))
+
+(defwidget workb [id]
+  (button :class "workspace-button"
+          :onclick "hyprctl dispatch workspace ${id}" "${id}"))
+
+(defwidget test []
+  (box :class "test-container"
+       :halign "end"
+       :valign "start"
+       (button :class "test-button"
+               :onclick "notify-send 'IDK' 'TEST'" "1")))

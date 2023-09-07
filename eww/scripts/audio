@@ -1,0 +1,23 @@
+#!/bin/sh
+
+volume=$(amixer sget Master | awk -F '[][]' '/Front Left: Playback/{gsub(/%/, "", $2); print $2}')
+
+icon(){
+	if [ $(amixer sget Master | awk -F '[][]' '/Front Left: Playback/{print $4}') = "off" ]; then
+		echo 󰝟
+	elif [ "$volume" -gt "66" ]; then
+		echo 󰕾
+	elif [ "$volume" -gt "33" ]; then
+		echo 󰖀
+	elif [ "$volume" -gt "0" ]; then
+		echo 󰕿
+	else
+		echo 󰝟
+	fi
+}
+
+[ "$1" = "volume" ] && echo $volume && exit
+[ "$1" = "icon" ] && icon && exit
+
+echo 
+exit

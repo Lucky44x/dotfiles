@@ -1,0 +1,145 @@
+(defwindow topbar :monitor 0
+               :geometry (geometry :x "0%"
+                                   :y "0%"
+                                   :width "100%"
+                                   :height "7.5%"
+                                   :anchor "top left")
+               :stacking "fg"
+               :exclusive false
+ (topbar))
+
+(defwidget bar-slider [class reveal reveal-name label value onchange tooltip]
+  (eventbox :onhover "${EWW_CMD} update ${reveal-name}=true"
+            :onhoverlost "${EWW_CMD} update ${reveal-name}=false"
+    (box :orientation "h"
+         :space-evenly false
+         (label :class "${class}-label"
+                         :text label)
+         (revealer :transition "slideright"
+                   :reveal reveal
+                   :duration "550ms"
+                   (scale :class "${class}-slider"
+                          :value value
+                          :onchange onchange
+                          :flipped false
+                          :orientation "h"
+                          :max 101
+                          :min 1
+                          :tooltip tooltip)))))
+
+(include "bar/topbar.yuck")
+
+;     VARS {{{
+
+(defvar scripts "~/.config/eww/scripts/")
+
+(defvar imgs "~/.config/eww/imgs/")
+
+(defpoll workspace-list   :interval "1s"
+                          :initial "[1]"
+                          "scripts/hypr workspacelist")
+
+(defpoll battery-icon     :interval "1s"
+                          :initial "#"
+                          "scripts/battery icon")
+
+(defpoll battery-percent  :interval "1s"
+                          :initial "10"
+                          "scripts/battery percent")
+
+(defpoll battery-state    :interval "1s"
+                          :initial "default"
+                          "scripts/battery state")
+
+(defpoll wifi-name        :interval "10s"
+                          :initial "#"
+                          "scripts/wifi name")
+
+(defpoll wifi-icon        :interval "5s"
+                          :initial "#"
+                          "scripts/wifi icon")
+ 
+
+(defpoll current-brightness :interval "1s"
+                            :initial "100"
+                            "brightnessctl -m -d intel_backlight | awk -F, '{print substr(\$4, 0, length(\$4)-1)}' | tr -d '%'")
+
+(defpoll current-volume :interval "1s" 
+                        :initial "100"
+                        "scripts/audio volume")
+
+(defpoll volume-icon :interval "250ms"
+                     :initial "#"
+                  "scripts/audio icon")
+
+(defpoll current-time-hour :interval "1s" 
+                           :initial "0"
+                           "date '+%H'")
+
+(defpoll current-time-minute :interval "1s"
+                             :initial "0"
+                             "date '+%M'")
+
+(defpoll current-time-tooltip :interval "10h"
+                              :intial "0"
+                              "date +'%a (%d) %b (%m) %Y'")
+
+(defpoll player-active :interval "1s"
+                       :initial "false"
+                       "scripts/music active")
+
+(defpoll song-name :interval "1s"
+                   :initial "#"
+                   :run-while player-active
+                   "scripts/music songname")
+
+(defpoll song-cover :interval "1s"
+                    :run-while player-active
+                    "scripts/music songcover")
+
+(defpoll player-symbol :interval "250ms"
+                       :initial "#"
+                       :run-while player-active
+                       "scripts/music icon")
+
+(defpoll song-artist  :interval "1s"
+                      :initial "#"
+                      :run-while player-active
+                      "scripts/music artist")
+
+(defpoll song-loopicon :interval "250ms"
+                       :initial "#"
+                       :run-while player-active
+                       "scripts/music loopicon")
+
+(defpoll song-shuffleicon :initial "#"
+                          :interval "250ms"
+                          :run-while player-active
+                          "scripts/music shuffleicon")
+
+(defpoll song-loopmode :initial "None"
+                       :interval "550ms"
+                       :run-while player-active
+                       "playerctl loop")
+
+(defpoll song-shufflemode :initial "Off"
+                          :interval "550ms"
+                          :run-while player-active
+                          "playerctl shuffle")
+
+(defpoll bluetooth-active :interval "1s"
+                          :initial false
+                          "scripts/bluetooth active")
+
+(defpoll bluetooth-icon :interval "2s"
+                        :initial "#"
+                        "scripts/bluetooth icon") 
+
+(defpoll bluetooth-name :interval "10s"
+                        :initial "-"
+                        "scripts/bluetooth name")
+
+(defpoll current-workspace :interval "500ms"
+                           :initial "󰿪"
+                           "scripts/hypr workspace-icon")
+;}}}

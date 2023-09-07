@@ -1,0 +1,42 @@
+(defwidget battery [classname]
+  (box :space-evenly false
+       :halign "start"
+       (label   :text   battery-icon
+                :halign "center"
+                :class classname
+                :css ".${classname} {color: ${battery-color};}"
+                :tooltip "Battery: ${battery-percent}%")))
+
+(defwidget wifi [classname]
+  (box :space-evenly false
+       (button :class classname
+              :tooltip "${wifi-name}"
+              :onclick "hyprctl dispatch exec 'kitty -e nmtui'"
+              wifi-icon)))
+
+(defwidget bluetooth [classname]
+  (box :space-evenly false
+       (button  :onclick "hyprctl dispatch exec blueman-manager"
+                :class classname
+                :css ".${classname} {color: ${bluetooth-color};}"
+                :tooltip bluetooth-name
+                bluetooth-icon)))
+
+(defwidget bar-slider [class reveal reveal-name label value onchange tooltip]
+  (eventbox :onhover "${EWW_CMD} update ${reveal-name}=true"
+            :onhoverlost "${EWW_CMD} update ${reveal-name}=false"
+    (box :orientation "v"
+         :space-evenly false
+         (revealer :transition "slideup"
+                   :reveal reveal
+                   :duration "550ms"
+                   (scale :class "${class}-slider"
+                          :value value
+                          :onchange onchange
+                          :flipped true
+                          :orientation "v"
+                          :max 101
+                          :min 1
+                          :tooltip tooltip))
+         (label :class "${class}-label"
+                :text label))))

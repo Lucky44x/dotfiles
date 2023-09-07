@@ -1,0 +1,112 @@
+#!/bin/sh
+meta=$(playerctl metadata)
+
+icon(){
+	state=$(playerctl status)
+
+	[ "$state" = "Playing" ] && echo 󰏤 && exit
+	[ "$state" = "Paused" ] && echo 󰐊 && exit
+}
+
+songname(){
+	[ "$meta" = "No players found" ] && echo "Nothing" && exit
+	coverurl=$(playerctl metadata --format '{{xesam:title}}')
+	echo "${coverurl}"
+}
+
+coverart(){
+	[ "$meta" = "No players found" ] && echo "" && exit
+	coverurl=$(playerctl metadata --format '{{mpris:artUrl}}')
+	echo $coverurl
+}
+
+changeloop(){
+	mode=$(playerctl loop)
+	case "$mode" in
+		"None") $(playerctl loop Track)
+		;;
+		"Track") $(playerctl loop Playlist)
+		;;
+		"Playlist") $(playerctl loop None)
+		;;
+	esac
+}
+
+loopicon(){
+	mode=$(playerctl loop)
+	case "$mode" in
+		"None") echo 󰑗
+		;;
+		"Track") echo 󰑘
+		;;
+		"Playlist") echo 󰑖
+		;;
+	esac
+}
+
+shuffleicon(){
+	[ $(playerctl shuffle) = "Off" ] && echo 󰒞 && exit
+	echo 󰒟
+	exit
+}
+
+coverartcache(){
+	[ "$meta" = "No players found" ] && echo "" && exit
+	coverurl=$(playerctl metadata --format '{{mpris:artUrl}}')
+	coverimage=$(playerctl metadata --format '{{xesam:title}}')
+
+	clearcache
+
+	if [[ $coverurl == "https:"* ]]; then
+		coverimage="$HOME/.cache/eww/images/$coverimage.png"
+
+		[ -e $coverimage ] && echo $coverimage && exit
+		
+		path=$coverimage
+		coverimage="$HOME/.config/eww/images/noimage.png"
+		timeout 15s curl $coverurl >> $path
+		
+		[ -e "$path" ] && echo "$path" && exit
+
+		coverurl=$coverimage
+	fi
+	echo "${coverurl}"
+}
+
+artist(){
+	artistname=$(playerctl metadata --format '{{xesam:artist}}')
+	echo $artistname
+}
+
+isplayer(){
+	players=$(playerctl -l)
+
+	if [[ $players == "" ]]; then
+		echo "false"
+		exit
+	else
+		clearcache
+		echo "true"
+		exit
+	fi
+}
+
+clearcache(){
+	if [[ "$(ls $HOME/.cache/eww/images | wc -l)" -gt 10 ]]; then
+		find $HOME/.cache/eww/images -name "*.png" -exec rm -f {} +	
+	fi
+}
+
+[ "$1" = "icon" ] && icon && exit
+[ "$1" = "active" ] && isplayer && exit
+[ "$1" = "songcover" ] && coverartcache && exit
+[ "$1" = "songname" ] && songname && exit
+[ "$1" = "artist" ] && artist && exit
+[ "$1" = "loopicon" ] && loopicon && exit
+[ "$1" = "changeloop" ] && changeloop && exit
+[ "$1" = "shuffleicon" ] && shuffleicon && exit
+if [[ "$1" = "clearcache" ]]; then
+	[ "$2" = "force" ] && find $HOME/.cache/eww/images -name "*.png" -exec rm -f {} + && exit
+	clearcache
+	exit
+fi

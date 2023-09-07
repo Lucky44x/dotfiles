@@ -1,0 +1,121 @@
+(defvar expandbar false)
+(defvar expandbright false)
+(defvar expandvol false)
+(defvar expandmusic false)
+(defvar expandpower false)
+
+(defwidget bar [] 
+  (box :valign "end"
+       :halign "start"
+       (revealer :transition "slideright"
+                 :duration "550ms"
+                 :reveal expandbar
+                 (box :class "sidebar-container"
+                      :width 100
+                      :height 1080
+                      :orientation "v"
+                      (sidebar-top)
+                      (sidebar-bottom)))))
+
+(defwidget sidebar-top []
+  (box :valign "start"
+       :class "sidebar-top-container"
+       :space-evenly false
+       :orientation "v"
+       (clock)
+       (workspace)
+       (music)))
+
+(defwidget sidebar-bottom []
+  (box :valign "end"
+       :class "sidebar-bottom-container"
+       :space-evenly false
+       :orientation "v"
+       (wifi :classname "sidebar-wifi")
+       (bluetooth :classname "sidebar-bluetooth")
+       (battery :classname "sidebar-battery")
+       (bar-slider :class "sidebar-volume" 
+                   :reveal expandvol
+                   :reveal-name "expandvol"
+                   :label volume-icon
+                   :value current-volume
+                   :onchange "amixer sset Master {}%"
+                   :tooltip "${current-volume}%")
+       (bar-slider :class "sidebar-brightness"
+                   :reveal expandbright
+                   :reveal-name "expandbright"
+                   :label "󰃠"
+                   :value current-brightness
+                   :onchange "brightnessctl set {}%"
+                   :tooltip "${current-brightness}%")
+       (sidebar-power-menu)))
+
+(defwidget sidebar-power-menu []
+  (eventbox :onhover "${EWW_CMD} update expandpower=true"
+            :onhoverlost "${EWW_CMD} update expandpower=false"
+            (box :orientation "v"
+                 :space-evenly false
+                 :class "sidebar-powermenu"
+                 (revealer :transition "slideup"
+                           :reveal expandpower
+                           :duration "550ms"
+                           (box :orientation "v"
+                                :space-evenly false
+                            (button :class "sidebar-pm-b-lock"
+                                    :tooltip "Lock screen"
+                                    :onclick "hyprctl dispatch exec swaylock" "")
+                            (button :class "sidebar-pm-b-reboot"
+                                    :tooltip "Reboot"
+                                    :onclick "reboot" "")))
+                 (button :class "sidebar-pm-b-power"
+                         :tooltip "Power"
+                         :onclick "shutdown now" ""))))
+
+(defwidget clock []
+  (box :orientation "v"
+       :class "sidebar-clock"
+       :tooltip "${current-time-hour}:${current-time-minute}"
+       (label :text current-time-hour
+              :class "sidebar-clock-label")
+       (label :text current-time-minute
+              :class "sidebar-clock-label")))
+
+(defwidget music []
+  (eventbox :onhover "${EWW_CMD} update expandmusic=true"
+            :onhoverlost "${EWW_CMD} update expandmusic=false"
+            :active player-active
+            :visible player-active
+            (box :orientation "v"
+                 :space-evenly false
+                 :class "sidebar-musicmenu"
+                 (revealer :transition "slidedown"
+                           :reveal expandmusic
+                           :duration "550ms"
+                           (box :orientation "v"
+                                :space-evenly false
+                                (button :class "sidebar-mm-playback"
+                                        :onclick "playerctl play-pause" "${player-symbol}")
+                                (button :class "sidebar-mm-next"
+                                        :onclick "playerctl next" "󰒭")
+                                (button :class "sidebar-mm-previous"
+                                        :onclick "playerctl previous" "󰒮")
+                                (box :orientation "h"
+                                     (button :class "sidebar-mm-shuffle"
+                                             :tooltip "Shuffle: ${song-shufflemode}"
+                                             :onclick "playerctl shuffle Toggle" "${song-shuffleicon}")
+                                     (button :class "sidebar-mm-loop"
+                                             :onclick "${scripts}music changeloop"
+                                             :tooltip "Loop: ${song-loopmode}" "${song-loopicon}"))))
+                 (box :class "sidebar-mm-icon"
+                      :style "background-image: url('${song-cover}');"
+                      :valign "start"
+                      :tooltip "${song-artist}: ${song-name}"
+                      :width "100"
+                      :height "100"))))
+
+(defwidget workspace []
+  (box :valign "start"
+       :class "sidebar-workspace-container"
+       (label :class "sidebar-workspace-icon"
+              :text current-workspace
+              :tooltip "Current workspace")))

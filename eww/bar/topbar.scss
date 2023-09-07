@@ -1,0 +1,227 @@
+.topbar-container {
+	background: $background2;
+	padding: .5em;
+}
+
+.sys-tray-container {
+	/*
+	border-radius: 5px;
+	background: $orange;
+	border-bottom: 8px solid $orange-darker;
+	*/
+}
+
+//		Clock Widget {{{
+
+.time-container {
+	color: $foreground1;
+	background: $aqua;
+	padding: .2em .5em .2em;
+	border-bottom: 8px solid $aqua-darker;
+	border-radius: 10px;
+}
+
+.time-container label {
+	font-family: Fira Code;
+	font-size: 2em;
+	font-weight: bold;
+}
+
+//}}}
+
+//		Battery Widget {{{
+
+.battery-container-charging, .battery-container-critical, .battery-container-default {
+	min-width: 40px;
+	background: $foreground4;
+	border-bottom: 8px solid $background4;
+	border-radius: 10px;
+	padding: .2em .5em .2em;
+}
+
+.battery-container-critical {
+	background: $red;
+	border-bottom: 8px solid $red-darker;
+}
+
+.battery-container-charging {
+	background: $orange;
+	border-bottom: 8px solid $orange-darker;
+}
+
+.battery-container-charging label, .battery-container-default label, .battery-container-critical label {
+	font-family: Fira Code;
+	font-size: 2em;
+	color: $foreground;
+}
+//}}}
+
+//		Wifi Widget {{{
+
+.wifi-container {
+	min-width: 40px;
+	background: $purple;
+	border-bottom: 8px solid $purple-darker;
+	border-radius: 10px;
+}
+
+.wifi-container label {
+	font-family: Fira Code;
+	font-size: 2em;
+	color: $foreground;
+	margin-right: .25em;
+	margin-bottom: .2em;
+}
+//}}}
+
+//		Bluetooth Widget {{{
+
+.bluetooth-container-true, .bluetooth-container-false {
+	min-width: 40px;
+	border-radius: 10px;
+	padding: .2em .5em .2em;
+}
+
+.bluetooth-container-false {
+	background: $gray;
+	border-bottom: 8px solid $gray-darker;
+}
+
+.bluetooth-container-true {
+	background: $blue;
+	border-bottom: 8px solid $blue-darker;
+}
+
+.bluetooth-container-true label, .bluetooth-container-false label {
+	font-family: Fira Code;
+	font-size: 2em;
+	color: $foreground;
+	margin-right: .1em;
+	margin-bottom: .15em;
+}
+//}}}
+
+//		Volume Slider {{{
+
+.volume-container {
+	background: $green;
+	border-bottom: 8px solid $green-darker;
+	border-radius: 10px;
+	padding: .2em .5em .2em .8em;
+}
+
+.volume-label {
+	margin-right: .3em;
+	font-size: 2em;
+	color: $foreground;
+}
+
+
+.volume-slider trough {
+	margin-left: .5em;
+	border-top: 8px solid $green-darker;
+}
+
+.volume-slider trough highlight {
+	background: $foreground;
+}
+//}}}
+
+//		Brightness Slider {{{
+
+.brightness-container {
+	background: $yellow;
+	border-bottom: 8px solid $yellow-darker;
+	border-radius: 10px;
+	padding: .2em .7em .2em .7em;
+}
+
+.brightness-label {
+	margin-right: .3em;
+	font-size: 2em;
+	color: $foreground;
+}
+
+
+.brightness-slider trough {
+	margin-left: .5em;
+	border-top: 8px solid $yellow-darker;
+}
+
+.brightness-slider trough highlight {
+	background: $foreground;
+}
+//}}}
+
+//		Music Widget {{{
+.music-container {
+	border-radius: 5px;
+	border: 2px solid $foreground;
+	background-size: cover;
+}
+
+.music-container label {
+	font-size: 2em;
+	color: $foreground;
+	background: rgba($gray, 0.8);
+	border-bottom: 8px solid rgba($gray-darker, 0.8);
+}
+
+.mm-button {
+	font-size: 1.3em;
+	transition: 550ms;
+	background: $gray;
+	border-bottom: 8px solid $gray-darker;
+	min-width: 40px;
+	border-radius: 5px;
+	color: $foreground;
+}
+
+.mm-button:hover {
+	background: $aqua;
+	border-bottom: 8px solid $aqua-darker;
+}
+
+//}}}
+
+//		Workspace-Widget
+
+.workspace-container {
+	border-radius: 10px;
+	background: $purple;
+	border-bottom: 8px solid $purple-darker;
+}
+
+.workspace-container label {
+	color: $foreground;
+	font-size: 1.5em;
+	margin-left: .6em;
+	margin-right: .25em;
+	margin-bottom: .2em;
+}
+
+.workspace-list-container {
+	border-radius: 10px;
+	background: $background3;
+	margin-top: .4em;
+	margin-bottom: .8em;
+	margin-left: 1em;
+	margin-right: 1em;
+	border-top: 8px solid $purple-darker;
+}
+
+.workspace-list-container button label {
+	font-size: 1.25em;
+	font-weight: bold;
+	font-family: Fira Code;
+	color: $purple;
+}
+
+.workspace-list-container button:hover label {
+	color: $purple-darker;
+}
+
+.test-button{
+	background: $green;
+	border-bottom: 8px solid $green-darker;
+}

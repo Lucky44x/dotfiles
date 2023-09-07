@@ -1,0 +1,43 @@
+#!/bin/sh
+output=$(hyprctl info --batch activewindow)
+
+open(){
+	
+	if [ "$output" = "Invalid" ]; then
+		echo "false"
+	else
+		echo "true"
+	fi
+}
+
+workspaceicon(){
+	workspace=$(hyprctl monitors | grep active | awk '{print $3}')
+	
+	case "$workspace" in
+		1) echo 󰼏
+		;;
+		2) echo 󰼐
+		;;
+		3) echo 󰼑
+		;;
+		4) echo 󰼒
+		;;
+		5) echo 󰼓 
+		;;
+		6) echo 󰼔
+		;;
+		7) echo 󰼕
+		;;
+		8) echo 󰼕
+		;;
+		9) echo 󰼗
+		;;
+		10) echo 󰿪
+		;;
+	esac
+
+	exit
+}
+
+[ "$1" = "windowopen" ] && open && exit
+[ "$1" = "workspace-icon" ] && workspaceicon && exit

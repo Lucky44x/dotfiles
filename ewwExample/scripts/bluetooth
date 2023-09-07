@@ -1,0 +1,44 @@
+#!/bin/sh
+
+powered=$(bluetoothctl show 58:96:1D:D3:E5:9F | grep "Powered" | awk '{print $2}')
+
+icon() {
+	[ "$powered" = "no" ] && echo 󰂲 && exit
+
+	if [ "$(bluetoothctl info | sed -n '1p')" = "Missing device address argument" ]; then
+		echo 󰂯
+		exit
+	fi
+	
+	echo 󰂱
+}
+
+name(){
+	if [ "$(bluetoothctl info) | sed -n '1p'" = "Missing device address argument" ]; then
+		echo "-"
+		exit
+	fi
+
+	echo $(bluetoothctl info) | awk -F': ' '/Name/ {gsub(" Alias", "", $2); print $2}'
+}
+
+color(){
+	[[ $powered = "no" ]] && echo "#9399b2" && exit
+	echo "#89b4fa"
+}
+
+toggle(){
+	[ $powered = "no" ] && $(timeout 2s bluetoothctl power on) && exit
+	$(timeout 2s bluetoothctl power off)
+}
+
+active() {
+	[ $powered = "no" ] && echo "false" && exit
+	echo "true"
+}
+
+[ "$1" == "toggle" ] && toggle && exit
+[ "$1" == "icon" ] && icon && exit
+[ "$1" == "color" ] && color && exit
+[ "$1" == "active" ] && active && exit
+[ "$1" == "name" ] && name && exit

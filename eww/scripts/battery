@@ -1,0 +1,125 @@
+#!/bin/sh
+
+icon="NAN"
+
+bat=/sys/class/power_supply/BAT1/
+per="$(cat "$bat/capacity")"
+
+warninglock="$HOME/.cache/eww/locks/batwarn.lock"
+warninglock10="$HOME/.cache/eww/locks/batwarn10.lock"
+
+color(){
+	if [ $(cat "$bat/status") = Full ]; then
+		echo "#8ec07c"
+	elif [ "$per" -le "20" ]; then
+		echo "#fb4934"
+	elif [ $(cat "$bat/status") = Charging ]; then
+		echo "#fabd2f"
+	else
+		echo "#fbf1c7"
+	fi
+}
+
+icon(){
+	if [ $(cat "$bat/status") = Full ]; then
+		echo "󱟢" && exit
+	elif [ $(cat "$bat/status") = Charging ]; then
+		if [ "$per" -gt "90" ]; then
+			icon="󰂋"
+		elif [ "$per" -gt "80" ]; then
+			icon="󰂊"
+		elif [ "$per" -gt "70" ]; then
+			icon="󰢞"	
+		elif [ "$per" -gt "60" ]; then
+			icon="󰂉"
+		elif [ "$per" -gt "50" ]; then
+			icon="󰢝"
+		elif [ "$per" -gt "40" ]; then
+			icon="󰂈"
+		elif [ "$per" -gt "30" ]; then
+			icon="󰂇"
+		elif [ "$per" -gt "20" ]; then
+			icon="󰂆"
+		elif [ "$per" -gt "10" ]; then
+			icon="󰢜"
+		elif [ "$per" -gt "0" ]; then
+			icon="󰢟"
+		else
+			echo 󱃍 && exit
+		fi
+	else
+		cmc
+		if [ "$per" -gt "90" ]; then
+			icon="󰁹"
+		elif [ "$per" -gt "80" ]; then
+			icon="󰂂"
+		elif [ "$per" -gt "70" ]; then
+			icon="󰂁"	
+		elif [ "$per" -gt "60" ]; then
+			icon="󰂀"
+		elif [ "$per" -gt "50" ]; then
+			icon="󰁿"
+		elif [ "$per" -gt "40" ]; then
+			icon="󰁾"
+		elif [ "$per" -gt "30" ]; then
+			icon="󰁽"
+		elif [ "$per" -gt "20" ]; then
+			icon="󰁼"
+		elif [ "$per" -gt "10" ]; then
+			icon="󰁻"
+			sendwarning
+		elif [ "$per" -gt "0" ]; then
+			icon="󰁺"
+			sendwarning10
+		else
+			echo 󱃍 && exit
+		fi
+	fi
+	echo "$icon"
+}
+
+#send warning
+sendwarning(){
+	if [[ ! -e $warninglock ]]; then 
+		touch $warninglock
+		notify-send -u critical "Battery low 󰁻" "Only $per% remaining... Connect charger"
+	fi
+}
+
+sendwarning10(){
+	if [[ ! -e $warninglock10 ]]; then 
+		touch $warninglock10
+		notify-send -u critical "Battery critical 󱃍" "Only $per% remaining... Connect charger"
+	fi
+}
+
+#clear message cache
+cmc(){
+	if [ "$per" -gt "10" ] && [ -e $warninglock10 ]; then
+		rm $warninglock10
+	elif [ "$per" -gt "20" ] && [ -e $warninglock ]; then
+		rm $warninglock
+	fi
+}
+
+percent(){
+	echo $per
+}
+
+state(){
+	if [ "$per" -le "20" ]; then
+		echo "critical"
+	elif [ $(cat "$bat/status") = Charging ]; then
+		echo "charging"
+	else
+		echo "default"
+	fi
+
+}
+
+[ "$1" = "icon" ] && icon && exit
+[ "$1" = "percent" ] && percent && exit
+[ "$1" = "color" ] && color && exit
+[ "$1" = "state" ] && state && exit
+echo error
+exit

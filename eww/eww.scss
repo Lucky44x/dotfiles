@@ -1,0 +1,67 @@
+@import 'styles/gruvbox.scss';
+@import 'bar/topbar.scss';
+
+button {
+	all: unset;
+}
+
+window {
+	all: unset;
+}
+
+* {
+//	all: unset;
+	border: none;
+	//background: unset;
+}
+
+tooltip {
+	background: rgba($background3, .95);
+	color: $foreground;
+	font-family: Fira Code;
+	font-weight: bold;
+	font-size: 1.5em;
+	border-radius: 15px;
+}
+
+scale, scale * {
+	all: unset;
+}
+
+scale trough {
+	all: unset;
+	border-top: 8px solid $purple-darker;
+	background-color: $background3;
+	border-radius: 5px;
+	min-height: 15px;
+	min-width: 110px;
+}
+
+scale trough highlight {
+	all: unset;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+menu {
+	border-radius: 10px;
+	background: $background2;
+}
+
+menu * {
+	font-size: 1rem;
+	font-family: FiraCode;
+}
+
+menu *:hover {
+	background: $background1;
+}
+
+menu label {
+	color: $foreground;
+}
+
+menu box {
+	color: $foreground;
+	//border-bottom: 2px solid $background;
+}
