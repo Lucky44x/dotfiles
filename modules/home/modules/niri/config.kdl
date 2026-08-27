@@ -1,0 +1,180 @@
+include optional=true "~/.config/niri/theme.kdl"
+
+input {
+    keyboard {
+        xkb {
+            layout "gb"
+        }
+    }
+
+    focus-follows-mouse max-scroll-amount="0%"
+
+    touchpad {
+      tap
+      natural-scroll
+    }
+
+    tablet {
+        map-to-output "eDP-1"
+    }
+
+    touch {
+        map-to-output "eDP-1"
+    }
+}
+
+output "eDP-1" {
+    mode "2880x1920@60"
+    scale 2.0
+    transform "normal"
+
+    position x=1280 y=0
+
+    focus-at-startup
+    hot-corners {
+        top-left
+    }
+}
+
+layout {
+    gaps 8
+
+    border {
+        off
+    }
+    shadow {
+        off
+    }
+
+    tab-indicator {
+        on
+        hide-when-single-tab
+        gap -16
+        position "left"
+        gaps-between-tabs 4
+        corner-radius 15
+    }
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+}
+
+switch-events {
+  //TODO: Implement Standby etc into configuration
+  tablet-mode-on { spawn "notify-send" "Tablet Mode On"; }
+  tablet-mode-off { spawn "notify-send" "Tablet Mode Off"; }
+}
+
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+blur {
+    on
+}
+
+window-rule {
+  geometry-corner-radius 12
+  clip-to-geometry true
+}
+
+window-rule {
+  match app-id=r#"kitty$"#
+  draw-border-with-background false
+  background-effect { blur true; }
+}
+
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+binds {
+    Mod+T repeat=false { spawn "kitty"; }
+    Mod+Space { spawn "fuzzel"; }
+    Mod+Q { close-window; }
+
+    Ctrl+Alt+Delete { quit; }
+
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Shift+Print { screenshot-window; }
+
+    Mod+Left { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up { focus-workspace-up; }
+    Mod+Down { focus-workspace-down; }
+
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
+    Mod+WheelScrollRight                { focus-column-right; }
+    Mod+WheelScrollLeft                 { focus-column-left; }
+
+    Mod+MouseBack { focus-window-previous; }
+
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+
+    Ctrl+Mod+1 { move-window-to-workspace 1; }
+    Ctrl+Mod+2 { move-window-to-workspace 2; }
+    Ctrl+Mod+3 { move-window-to-workspace 3; }
+    Ctrl+Mod+4 { move-window-to-workspace 4; }
+    Ctrl+Mod+5 { move-window-to-workspace 5; }
+    Ctrl+Mod+6 { move-window-to-workspace 6; }
+    Ctrl+Mod+7 { move-window-to-workspace 7; }
+    Ctrl+Mod+8 { move-window-to-workspace 8; }
+    Ctrl+Mod+9 { move-window-to-workspace 9; }
+
+    Ctrl+Mod+Left { move-column-left; }
+    Ctrl+Mod+Right { move-column-right; }
+    Ctrl+Mod+Up {  move-window-to-workspace-up; }
+    Ctrl+Mod+Down { move-window-to-workspace-down; }
+
+    Shift+Mod+Left { set-window-width "-10%"; }
+    Shift+Mod+Right { set-window-width "+10%"; }
+    Shift+Mod+Up { set-window-height "-10%"; }
+    Shift+Mod+Down { set-window-height "+10%"; }
+
+    Mod+O { toggle-overview; }
+
+    Mod+F { maximize-column; }
+
+    Mod+Z { toggle-window-floating; }
+    Shift+Mod+Z { switch-focus-between-floating-and-tiling; }
+
+    // Example volume keys mappings for PipeWire & WirePlumber.
+    // The allow-when-locked=true property makes them work even when the session is locked.
+    // Using spawn-sh allows to pass multiple arguments together with the command.
+    // "-l 1.0" limits the volume to 100%.
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+
+    // Example media keys mapping using playerctl.
+    // This will work with any MPRIS-enabled media player.
+    XF86AudioPlay        allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioPause       allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioStop        allow-when-locked=true { spawn-sh "playerctl stop"; }
+    XF86AudioPrev        allow-when-locked=true { spawn-sh "playerctl previous"; }
+    XF86AudioNext        allow-when-locked=true { spawn-sh "playerctl next"; }
+
+    // Example brightness key mappings for brightnessctl.
+    // You can use regular spawn with multiple arguments too (to avoid going through "sh"),
+    // but you need to manually put each argument in separate "" quotes.
+    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+}
