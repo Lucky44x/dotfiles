@@ -1,6 +1,7 @@
-mozilla
-qBittorrent
-vlc
-pulse
-go
-dconf
+*
+
+!.gitignore
+!niri
+!foot
+!fish
+!fastfetch

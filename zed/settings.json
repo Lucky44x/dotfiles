@@ -7,6 +7,21 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Zed (Default)",
+    "dark": "Zed (Default)"
+  },
+  "agent": {
+    "default_model": {
+      "provider": "openai-subscribed",
+      "model": "gpt-5.4",
+      "enable_thinking": true,
+      "effort": "medium"
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
   "session": {
     "trust_all_worktrees": true
   },
@@ -21,6 +36,13 @@
   "theme": {
     "mode": "dark",
     "light": "Everforest Light Soft (blur)",
-    "dark": "Everforest Dark Soft (blur)",
+    "dark": "DankShell Dark",
   },
+  "lsp": {
+    "qml": {
+      "binary": {
+        "path": "/usr/lib/qt6/bin/qmlls"
+      }
+    }
+  }
 }
